@@ -1,4 +1,4 @@
-# Sovereign Adaptive Optimization Engine (SAOE)
+# SolverX — Sovereign Adaptive Optimization Engine (SAOE)
 from __future__ import annotations
 
 import os

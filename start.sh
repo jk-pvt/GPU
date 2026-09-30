@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 mkdir -p build
 PY=${PYTHON:-python3}
 command -v "$PY" >/dev/null || { echo "Python 3.8+ not found (set PYTHON=...)"; exit 1; }
-printf '\n \033[38;2;255;140;26mPRAMANA\033[0m \033[38;2;135;135;135m- certified LP / MILP / QP solver\033[0m\n\n'
+printf '\n \033[38;2;255;140;26mSolverX\033[0m \033[38;2;135;135;135m- certified LP / MILP / QP solver\033[0m\n\n'
 if cmake -S . -B build -DCMAKE_BUILD_TYPE=Release >build/start_build.log 2>&1 && cmake --build build -j >>build/start_build.log 2>&1; then
   echo " ✓ build       build/pramana"
 elif [ -x build/pramana ]; then

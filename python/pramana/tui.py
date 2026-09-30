@@ -632,7 +632,7 @@ class App:
                 rows.append(pad(a, lw) + c(" │ ", ORANGE) + pad(b, rw))
         else:
             rows = left + ["---"] + right
-        box(rows, w, title=f"PRAMANA v{VERSION} (2.0 · SAOE Sovereign Optimizer)", title_style=BOLD + ORANGE)
+        box(rows, w, title=f"SolverX · PRAMANA v{VERSION} (SAOE 2.0)", title_style=BOLD + ORANGE)
         out()
 
     # ----- input area
@@ -652,7 +652,7 @@ class App:
         def seg(text, bgc, fgc=BLACK):
             return bgc + fgc + BOLD + f" {text} " + RESET
 
-        left = seg("PRAMANA", BG_ORANGE) + seg(ROOT.name, BG_YELLOW) + \
+        left = seg("SolverX", BG_ORANGE) + seg(ROOT.name, BG_YELLOW) + \
             seg(f"engine {self.settings['algo']} · {self.settings['time']:g}s", BG_WHITE)
         right = ""
         if self.last:
@@ -1495,7 +1495,7 @@ class App:
             out(c("  build it first:  build.bat   (or start.bat, which builds and launches this console)", WHITE))
             return 1
         sys.stdout.write("\x1b[2J\x1b[3J\x1b[H")
-        sys.stdout.write(c("  starting PRAMANA …", DIM))
+        sys.stdout.write(c("  starting SolverX …", DIM))
         sys.stdout.flush()
         self.probe()
         sys.stdout.write("\r\x1b[2K")

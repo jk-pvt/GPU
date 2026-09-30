@@ -136,17 +136,17 @@ def box(rows: List[str], width: Optional[int] = None, title: Optional[str] = Non
 def print_heading():
     w = term_width()
     banner = [
-        "██████╗ ██████╗  █████╗ ███╗   ███╗ █████╗ ███╗   ██╗ █████╗ ",
-        "██╔══██╗██╔══██╗██╔══██╗████╗ ████║██╔══██╗████╗  ██║██╔══██╗",
-        "██████╔╝██████╔╝███████║██╔████╔██║███████║██╔██╗ ██║███████║",
-        "██╔═══╝ ██╔══██╗██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║",
-        "██║     ██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║",
-        "╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝",
+        "███████╗ ██████╗ ██╗     ██╗   ██╗███████╗██████╗ ██╗  ██╗",
+        "██╔════╝██╔═══██╗██║     ██║   ██║██╔════╝██╔══██╗╚██╗██╔╝",
+        "███████╗██║   ██║██║     ██║   ██║█████╗  ██████╔╝ ╚███╔╝ ",
+        "╚════██║██║   ██║██║     ╚██╗ ██╔╝ ██╔══╝  ██╔══██╗ ██╔██╗ ",
+        "███████║╚██████╔╝███████╗ ╚████╔╝  ███████╗██║  ██║██╔╝ ██╗",
+        "╚══════╝ ╚═════╝ ╚══════╝  ╚═══╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝",
     ]
     print()
     for row in banner:
         print(pad(c(row, BOLD, ORANGE), w, "center"))
-    print(pad(c("⚡ SOVEREIGN ADAPTIVE OPTIMIZATION ENGINE · SAOE (PRAMANA 2.0) ⚡", BOLD, YELLOW), w, "center"))
+    print(pad(c("⚡ SOLVERX — SOVEREIGN ADAPTIVE OPTIMIZATION ENGINE (SAOE 2.0) ⚡", BOLD, YELLOW), w, "center"))
     print(pad(c("Certified Autonomous Mathematical Programming · LP / MILP / QP · C++20 + GPU", ITALIC, WHITE), w, "center"))
 
     # System Status Bar
@@ -344,7 +344,7 @@ def action_autopsy(model_path: Optional[str] = None):
 def action_benchmark_hub():
     """Benchmark command directly in the CLI (displays precomputed + allows live runs)."""
     while True:
-        print(c("\n 📊 PRAMANA & SAOE BENCHMARK HUB", BOLD, ORANGE))
+        print(c("\n 📊 SOLVERX BENCHMARK HUB", BOLD, ORANGE))
         print(f"  {c('[1]', YELLOW)} View Certified Benchmark Results Table {c('(Netlib, Infeasible, MIPLIB3, Maros, Gen, Adversarial)', DIM)}")
         print(f"  {c('[2]', YELLOW)} Run Live Quick Benchmark Suite {c('(Execute & Verify Certified Solves Right Now)', WHITE)}")
         print(f"  {c('[3]', YELLOW)} Inspect Adversarial Scaled Suite {c('(Where Commercial Solvers Fail on Numerics)', WHITE)}")
@@ -382,9 +382,9 @@ def _display_benchmark_summary():
         badge = c(solved, BOLD, GREEN if "100%" in solved else YELLOW)
         rows.append(pad(c(title, WHITE), 32) + pad(str(total), 12) + pad(badge, 18) + pad(c(sgm, DIM), 12) + c(wrong, GREEN if wrong == "0" else RED))
     rows.append("---")
-    rows.append(c("✓ All PRAMANA solutions independently verified by exact rational arithmetic certifier.", GREEN))
+    rows.append(c("✓ All SolverX solutions independently verified by exact rational arithmetic certifier.", GREEN))
     rows.append(c("✓ Results reproducible with: python bench/run_bench.py --set <name>", DIM))
-    box(rows, title="Official PRAMANA Certified Benchmark Results", color=YELLOW)
+    box(rows, title="Official SolverX Certified Benchmark Results", color=YELLOW)
 
 
 def _run_live_benchmark_suite():
@@ -427,7 +427,7 @@ def _inspect_adversarial_suite():
         c("Adversarial Benchmark: Ill-conditioned, near-singular, and deceptive models", BOLD, WHITE),
         c("Designed to expose numerical breakdowns and false convergence in commercial solvers.", DIM),
         "---",
-        f"Score on Scaled Models: {c('PRAMANA: 17/17 (0 wrong)', BOLD, GREEN)} vs {c('HiGHS: 14/17 (3 wrong)', BOLD, RED)}",
+        f"Score on Scaled Models: {c('SolverX: 17/17 (0 wrong)', BOLD, GREEN)} vs {c('HiGHS: 14/17 (3 wrong)', BOLD, RED)}",
         f"Key Feature: {c('Exact Rational Bound Verification (pramana.verify) catches round-off drifts.', WHITE)}",
         "---",
         "Included instances: scaled_afiro, scaled_adlittle, nearsing_200, kleeminty_20, infeasthin_50",
@@ -534,7 +534,7 @@ def action_system_check():
 
 
 def action_launch_tui():
-    print(c("\n [>] Launching PRAMANA Fullscreen Interactive TUI...", BOLD, ORANGE))
+    print(c("\n [>] Launching SolverX Fullscreen Interactive TUI...", BOLD, ORANGE))
     cmd = [sys.executable, "-m", "pramana.tui"]
     env = dict(os.environ, PYTHONPATH=str(ROOT / "python") + (os.pathsep + os.environ.get("PYTHONPATH", "")))
     subprocess.run(cmd, cwd=str(ROOT), env=env)
@@ -546,7 +546,7 @@ def interactive_menu():
     while True:
         w = term_width()
         menu_items = [
-            f" {c('[1]', BOLD, YELLOW)}  {c('🚀 Solve Optimization Model', BOLD, WHITE)}         {c('(PRAMANA & SAOE AI Autopilot)', DIM)}",
+            f" {c('[1]', BOLD, YELLOW)}  {c('🚀 Solve Optimization Model', BOLD, WHITE)}         {c('(SolverX & SAOE AI Autopilot)', DIM)}",
             f" {c('[2]', BOLD, YELLOW)}  {c('🔬 Mathematical Autopsy', BOLD, WHITE)}             {c('(Sparsity, Conditioning, Decompositions)', DIM)}",
             f" {c('[3]', BOLD, YELLOW)}  {c('📊 Benchmark Hub & Check', BOLD, GREEN)}            {c('(Check Benchmark Results & Run Live Suite)', AMBER)}",
             f" {c('[4]', BOLD, YELLOW)}  {c('🏎️  Compare Solver Engines', BOLD, WHITE)}          {c('(Dual Simplex vs IPM vs PDHG vs Autopilot)', DIM)}",
@@ -555,12 +555,12 @@ def interactive_menu():
             f" {c('[7]', BOLD, YELLOW)}  {c('🖥️  Interactive TUI Console', BOLD, WHITE)}        {c('(Fullscreen ANSI Terminal Interface)', DIM)}",
             f" {c('[0]', BOLD, YELLOW)}  {c('🚪 Exit CLI', BOLD, WHITE)}",
         ]
-        box(menu_items, title="Main Menu · Select an Action", color=ORANGE)
+        box(menu_items, title="SolverX Main Menu · Select an Action", color=ORANGE)
 
         choice = input(c("\n Enter selection [0-7] or type command (solve, bench, check, exit): ", BOLD, WHITE)).strip().lower()
 
         if choice in ("0", "exit", "quit", "q"):
-            print(c("\n Thank you for using PRAMANA / SAOE! Goodbye.\n", BOLD, YELLOW))
+            print(c("\n Thank you for using SolverX! Goodbye.\n", BOLD, YELLOW))
             break
         elif choice in ("1", "solve", "s"):
             action_solve()
@@ -588,7 +588,7 @@ def interactive_menu():
 # --------------------------------------------------------------------------- CLI Argument Parsing
 def main():
     parser = argparse.ArgumentParser(
-        description="PRAMANA 2.0 / SAOE — Sovereign Adaptive Optimization Engine CLI",
+        description="SolverX — Sovereign Adaptive Optimization Engine CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--solve", type=str, help="Solve a given model (.mps, .mps.gz, .qps)")

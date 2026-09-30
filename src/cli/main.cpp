@@ -1,4 +1,4 @@
-// PRAMANA command line interface.
+// SolverX command line interface.
 //
 //   pramana solve <model.mps[.gz]|.qps> [options]     (default command)
 //   pramana verify <model> <result.json>               re-certify a result file
@@ -33,8 +33,8 @@ namespace {
 
 void usage() {
   std::printf(
-      "PRAMANA 2.0 / SAOE - Sovereign Adaptive Optimization Engine (CPU+GPU)\n\n"
-      "usage: pramana [solve] <model.mps[.gz]|model.qps> [options]\n"
+      "SolverX 2.0 / SAOE - Sovereign Adaptive Optimization Engine (CPU+GPU)\n\n"
+      "usage: solverx [solve] <model.mps[.gz]|model.qps> [options]\n"
       "       pramana verify <model> <result.json>\n"
       "       pramana parametric <model> (--col NAME | --row NAME) --kind cost|rhs|lower|upper --from A --to B [--json F]\n"
       "       pramana family <model> (--col NAME | --row NAME) --kind cost|rhs|lower|upper --from A --to B --cases K [--json F]\n"

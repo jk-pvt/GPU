@@ -1,6 +1,6 @@
-# Sovereign Adaptive Optimization Engine — SAOE (PRAMANA 2.0)
+# SolverX — Sovereign Adaptive Optimization Engine (SAOE 2.0)
 
-> **A from-scratch sovereign LP/MILP/QP optimization engine that analyzes the mathematical structure of every problem, automatically generates an execution strategy, dynamically selects algorithms and numerical precision, learns from previous solves, and exploits CPU/GPU/HPC resources to obtain high-quality certified solutions efficiently.**
+> **SolverX is a from-scratch sovereign LP/MILP/QP optimization engine that analyzes the mathematical structure of every problem, automatically generates an execution strategy, dynamically selects algorithms and numerical precision, learns from previous solves, and exploits CPU/GPU/HPC resources to obtain high-quality certified solutions efficiently.**
 
 ---
 
@@ -241,11 +241,15 @@ Runs on any device, automatically installs required dependencies, builds native 
 ./run.sh --check
 ```
 
-### Python API & Architecture Reference (`saoe`)
+### Python API & Architecture Reference (`solverx` / `saoe`)
 
-The `saoe` package provides high-level intermediate representation, automated closed-loop optimization orchestration, structural autopsy, quantum-inspired combinatorial optimization, decomposition algorithms, and memory stores.
+The `solverx` (also aliased as `saoe`) package provides high-level intermediate representation, automated closed-loop optimization orchestration, structural autopsy, quantum-inspired combinatorial optimization, decomposition algorithms, and memory stores.
 
-#### Package Exports (`saoe.__all__`)
+```python
+import solverx  # or 'import saoe'
+```
+
+#### Package Exports (`solverx.__all__`)
 
 | Export Symbol | Module | Description |
 |---|---|---|

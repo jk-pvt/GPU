@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# PRAMANA 2.0 / SAOE — Single-Command Launcher (macOS & Linux)
+# SolverX — Single-Command Launcher (macOS & Linux)
 # Installs required packages, verifies native C++20 solver, and launches CLI.
 # Usage:
 #   ./run.sh                  (interactive menu with heading & prompts)

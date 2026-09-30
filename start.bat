@@ -8,7 +8,7 @@ rem ===========================================================================
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 chcp 65001 >nul
-title PRAMANA
+title SolverX
 
 for /f %%a in ('echo prompt $E^| cmd') do set "ESC=%%a"
 set "O=%ESC%[38;2;255;140;26m"
@@ -18,7 +18,7 @@ set "D=%ESC%[38;2;135;135;135m"
 set "N=%ESC%[0m"
 
 echo.
-echo  %O%PRAMANA%N% %D%- certified LP / MILP / QP solver%N%
+echo  %O%SolverX%N% %D%- certified LP / MILP / QP solver%N%
 echo.
 
 rem ---- 1. Python ---------------------------------------------------------------

@@ -33,7 +33,7 @@ class OrchestratedResult:
     def summary(self) -> str:
         lines = [
             "============================================================",
-            "   SOVEREIGN ADAPTIVE OPTIMIZATION ENGINE (SAOE) RESULT",
+            "   SOLVERX — SOVEREIGN ADAPTIVE OPTIMIZATION ENGINE RESULT",
             "============================================================",
             f"Model:           {self.autopsy.name} ({self.autopsy.num_vars} vars, {self.autopsy.num_constraints} cons, {self.autopsy.nnz} nnz)",
             f"Sparsity:        {self.autopsy.sparsity_ratio * 100:.2f}% | Class: {'QP' if self.autopsy.is_qp else ('MILP' if self.autopsy.num_integers > 0 else 'LP')}",

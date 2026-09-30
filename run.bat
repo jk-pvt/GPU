@@ -1,6 +1,6 @@
 @echo off
 rem ==============================================================================
-rem PRAMANA 2.0 / SAOE — Single-Command Launcher (Windows)
+rem SolverX — Single-Command Launcher (Windows)
 rem Installs required packages, verifies native C++20 solver, and launches CLI.
 rem Usage:
 rem   run.bat                  (interactive menu with heading & prompts)
@@ -10,7 +10,7 @@ rem ============================================================================
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 chcp 65001 >nul
-title PRAMANA 2.0 / SAOE
+title SolverX
 
 rem ---- 1. Locate Python --------------------------------------------------------
 set PYEXE=

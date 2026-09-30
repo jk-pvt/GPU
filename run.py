@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PRAMANA 2.0 / SAOE Universal Entrypoint.
+"""SolverX — Sovereign Adaptive Optimization Engine Universal Entrypoint.
 
 Usage:
   python run.py                   # Launches interactive CLI with heading & menu
