@@ -6,6 +6,7 @@ and front-ends (Python, C/C++, MPS, JSON).
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Union
 import pramana
@@ -149,10 +150,37 @@ class Model:
 
     @classmethod
     def from_mps(cls, mps_path: str) -> "Model":
-        """Read standard MPS/QPS file into Optimization IR."""
-        pm = pramana.Model.read(mps_path)
-        m = cls(name=Path(mps_path).stem)
-        # Reconstruct IR
-        for j in range(pm.num_vars):
-            m.add_variable(name=f"x{j}")
+        """Read standard MPS/QPS file into Optimization IR with complete structure."""
+        from pramana.verify import parse_mps
+        parsed = parse_mps(mps_path, exact=False)
+        m = cls(name=parsed.name or Path(mps_path).stem, maximize=parsed.maximize)
+        m.offset = float(parsed.offset)
+
+        # Build variables
+        for j, cname in enumerate(parsed.col_names):
+            clo = float(parsed.clo[j]) if parsed.clo[j] is not None else -INF
+            cup = float(parsed.cup[j]) if parsed.cup[j] is not None else INF
+            cost = float(parsed.cost[j]) if j < len(parsed.cost) else 0.0
+            is_int = bool(parsed.integer[j]) if j < len(parsed.integer) else False
+            is_bin = is_int and (clo == 0.0) and (cup == 1.0)
+            m.add_variable(name=cname, lb=clo, ub=cup, cost=cost, integer=is_int, binary=is_bin)
+
+        # Build constraints
+        # parsed.cols is list of dict {row_idx: val}
+        row_terms: List[Dict[int, float]] = [{} for _ in range(parsed.m)]
+        for j, col_dict in enumerate(parsed.cols):
+            for row_idx, val in col_dict.items():
+                if val != 0.0:
+                    row_terms[row_idx][j] = float(val)
+
+        for i, rname in enumerate(parsed.row_names):
+            rlo = float(parsed.rlo[i]) if parsed.rlo[i] is not None else -INF
+            rup = float(parsed.rup[i]) if parsed.rup[i] is not None else INF
+            m.add_constraint(row_terms[i], lb=rlo, ub=rup, name=rname)
+
+        # Quadratic terms
+        if hasattr(parsed, "q") and parsed.q:
+            for (i, j), val in parsed.q.items():
+                m.add_quadratic(i, j, float(val))
+
         return m

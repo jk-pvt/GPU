@@ -9,8 +9,9 @@ Performs a pre-solve mathematical autopsy:
 from __future__ import annotations
 
 import math
+from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple, Any, Union
 from ..ir.model import Model
 
 
@@ -73,7 +74,20 @@ class ProblemAutopsy:
 class ProblemIntelligence:
     """Pre-solve structural, graph, and numerical diagnostic engine."""
 
-    def analyze(self, model: Model) -> ProblemAutopsy:
+    def analyze(self, model: Union[Model, str, Path, Any]) -> ProblemAutopsy:
+        if isinstance(model, (str, Path)):
+            path_str = str(model)
+            try:
+                model = Model.from_mps(path_str)
+            except Exception:
+                import pramana
+                pm = pramana.Model.read(path_str)
+                model = Model(name=Path(path_str).stem)
+                for j in range(pm.num_vars):
+                    model.add_variable(name=f"x{j}")
+        elif hasattr(model, "to_pramana") and not isinstance(model, Model):
+            model = model
+
         m = model.num_constraints
         n = model.num_variables
         

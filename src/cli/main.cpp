@@ -33,7 +33,7 @@ namespace {
 
 void usage() {
   std::printf(
-      "PRAMANA 1.0 - certified LP/MILP/QP solver (from-scratch core, CPU+GPU)\n\n"
+      "PRAMANA 2.0 / SAOE - Sovereign Adaptive Optimization Engine (CPU+GPU)\n\n"
       "usage: pramana [solve] <model.mps[.gz]|model.qps> [options]\n"
       "       pramana verify <model> <result.json>\n"
       "       pramana parametric <model> (--col NAME | --row NAME) --kind cost|rhs|lower|upper --from A --to B [--json F]\n"

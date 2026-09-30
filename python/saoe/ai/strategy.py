@@ -16,7 +16,7 @@ class OptimizationStrategy:
     algorithm: str                  # "auto", "dual", "ipm", "pdhg-gpu", "pdhg-cpu", "bnb", "race"
     presolve_level: str             # "aggressive", "standard", "none"
     scaling_enabled: bool           # True / False
-    branching_strategy: str         # "reliability", "pseudocost", "gnn_guided", "strong"
+    branching_strategy: str         # "reliability", "pseudocost", "gnn_guided", "strong", "mostfrac"
     cut_selection: str              # "all", "mir_learned", "sparse_only", "none"
     precision: str                  # "FP32", "FP64", "Adaptive"
     use_gpu: bool                   # True / False
@@ -24,19 +24,35 @@ class OptimizationStrategy:
     decomposition: Optional[str]    # "Benders", "Dantzig-Wolfe", None
     threads: int = 0                # 0 = auto
     tolerance: float = 1e-7
+    time_limit: float = 0.0
+    mip_gap: float = 1e-4
 
     def to_solver_options(self) -> Dict[str, Any]:
-        """Maps Strategy to PRAMANA kernel options."""
-        return {
+        """Maps Strategy to high-performance PRAMANA C++ kernel options."""
+        # Map gnn_guided or custom branching rules to kernel-supported branching
+        branch_rule = self.branching_strategy
+        if branch_rule in ("gnn_guided", "hybrid_ai"):
+            branch_rule = "reliability"
+        elif branch_rule not in ("reliability", "pseudocost", "mostfrac", "strong"):
+            branch_rule = "reliability"
+
+        opts: Dict[str, Any] = {
             "algorithm": self.algorithm,
             "presolve": self.presolve_level != "none",
             "scale": self.scaling_enabled,
-            "branching": "reliability" if self.branching_strategy == "gnn_guided" else self.branching_strategy,
+            "branching": branch_rule,
             "cuts": self.cut_selection != "none",
             "heuristics": True,
             "allow_gpu": self.use_gpu,
             "tolerance": self.tolerance,
+            "threads": self.threads,
         }
+        if self.time_limit > 0:
+            opts["time_limit"] = self.time_limit
+        if self.mip_gap > 0:
+            opts["mip_gap"] = self.mip_gap
+
+        return opts
 
 
 class StrategyEngine:
@@ -56,22 +72,22 @@ class StrategyEngine:
         if historical_strategy and not user_overrides:
             return historical_strategy
 
-        # Rule & Heuristic AI Synthesis
+        # Rule & Heuristic AI Synthesis based on Mathematical Autopsy
         algo = "auto"
-        use_gpu = gpu_available and (autopsy.nnz > 30000)
+        use_gpu = gpu_available and (autopsy.nnz >= 30000)
         presolve = "aggressive" if autopsy.sparsity_ratio > 0.95 else "standard"
         branching = "gnn_guided" if autopsy.num_binaries > 50 else "reliability"
         cuts = "mir_learned" if autopsy.num_integers > 0 else "none"
-        use_quantum = autopsy.num_binaries > 20 and autopsy.integer_ratio > 0.3
+        use_quantum = autopsy.num_binaries > 15 and autopsy.integer_ratio > 0.25
         prec = "FP64" if autopsy.ill_conditioned else "Adaptive"
 
         if autopsy.is_qp:
             algo = "ipm"
         elif autopsy.num_integers > 0:
             algo = "bnb"
-        elif use_gpu and autopsy.nnz > 100000:
+        elif use_gpu and autopsy.nnz > 80000:
             algo = "pdhg-gpu"
-        elif autopsy.sparsity_ratio > 0.99:
+        elif autopsy.num_constraints > 5000 and autopsy.sparsity_ratio > 0.98:
             algo = "dual"
         else:
             algo = "auto"
