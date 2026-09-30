@@ -207,27 +207,141 @@
 
 ## 🚀 Quickstart
 
-### Python API
+### Single-Command Interactive CLI (Universal for macOS, Windows & Linux)
+Runs on any device, automatically installs required dependencies, builds native components if needed, prompts for inputs, and provides direct benchmark checking:
+
+- **macOS / Linux:**
+  ```bash
+  ./run.sh
+  ```
+- **Windows:**
+  ```cmd
+  run.bat
+  ```
+- **Universal (Python 3.8+):**
+  ```bash
+  python run.py
+  ```
+
+#### Direct CLI Commands & Benchmark Checking
+```bash
+# Check verified benchmark results directly in CLI
+./run.sh --bench          # (or run.bat --bench / python run.py --bench)
+
+# Solve a model with automatic engine routing
+./run.sh --solve data/netlib/afiro.mps.gz --algo auto
+
+# Perform mathematical structural autopsy
+./run.sh --autopsy data/gen/plan_10x12.mps
+
+# Compare all engines (Simplex, IPM, PDHG) side-by-side
+./run.sh --compare data/netlib/afiro.mps.gz
+
+# Run system self-check suite
+./run.sh --check
+```
+
+### Python API & Architecture Reference (`saoe`)
+
+The `saoe` package provides high-level intermediate representation, automated closed-loop optimization orchestration, structural autopsy, quantum-inspired combinatorial optimization, decomposition algorithms, and memory stores.
+
+#### Package Exports (`saoe.__all__`)
+
+| Export Symbol | Module | Description |
+|---|---|---|
+| [`Model`](file:///Users/jk/Desktop/GPU/python/saoe/ir/model.py) | `saoe.ir.model` | Intermediate representation optimization model (LP / MILP / QP) |
+| [`Var`](file:///Users/jk/Desktop/GPU/python/saoe/ir/model.py) | `saoe.ir.model` | Decision variable representation with bounds, types (continuous/integer/binary), costs |
+| [`Constraint`](file:///Users/jk/Desktop/GPU/python/saoe/ir/model.py) | `saoe.ir.model` | Linear and quadratic constraint specification with LHS/RHS bounds |
+| [`solve()`](file:///Users/jk/Desktop/GPU/python/saoe/__init__.py) | `saoe` | High-level closed loop autopilot: `Analyze -> Plan -> Solve -> Measure -> Adapt -> Learn` |
+| [`autopsy()`](file:///Users/jk/Desktop/GPU/python/saoe/__init__.py) | `saoe` | Mathematical structural autopsy inspecting sparsity, rank, condition number, graphs |
+| [`SolverOrchestrator`](file:///Users/jk/Desktop/GPU/python/saoe/orchestrator.py) | `saoe.orchestrator` | Central solver orchestration brain coordinating intelligence, strategy, and solve loop |
+| [`StrategyEngine`](file:///Users/jk/Desktop/GPU/python/saoe/ai/strategy.py) | `saoe.ai.strategy` | AI-assisted and rule-based strategy selector choosing precision, cuts, and solvers |
+| [`OptimizationStrategy`](file:///Users/jk/Desktop/GPU/python/saoe/ai/strategy.py) | `saoe.ai.strategy` | Dataclass describing algorithm choice, hardware device, numerical precision, cuts |
+| [`ProblemIntelligence`](file:///Users/jk/Desktop/GPU/python/saoe/ai/intelligence.py) | `saoe.ai.intelligence` | Mathematical autopsy engine calculating graph degrees, dynamic range, conditioning |
+| [`ProblemAutopsy`](file:///Users/jk/Desktop/GPU/python/saoe/ai/intelligence.py) | `saoe.ai.intelligence` | Structured diagnostic report of model characteristics and suggested decompositions |
+| [`QuantumInspiredSubproblemOptimizer`](file:///Users/jk/Desktop/GPU/python/saoe/quantum/qubo.py) | `saoe.quantum.qubo` | QUBO / Ising annealing solver for combinatorial binary subproblems |
+| [`IsingSolver`](file:///Users/jk/Desktop/GPU/python/saoe/quantum/qubo.py) | `saoe.quantum.qubo` | Spin-glass simulated quantum annealing engine |
+| [`DecompositionEngine`](file:///Users/jk/Desktop/GPU/python/saoe/decomposition/engine.py) | `saoe.decomposition.engine` | Structural partitioner for automated Benders and Dantzig-Wolfe decomposition |
+| [`LearningMemory`](file:///Users/jk/Desktop/GPU/python/saoe/learning/memory.py) | `saoe.learning.memory` | Continuous learning store recording solver telemetry and strategy performance |
+| [`ExperienceStore`](file:///Users/jk/Desktop/GPU/python/saoe/learning/memory.py) | `saoe.learning.memory` | Persistent database of solve runs for lifelong strategy tuning |
+
+#### Native Kernel Re-Exports
+Also available directly from `saoe`:
+- `PramanaModel`, `PramanaVar`, `PramanaResult`: Low-level ctypes bindings to C++20 engine
+- `solve_file(path, **kwargs)`: Direct solve of MPS/QPS files via C++ runtime
+- `gpu_info()`: CUDA hardware probe and device status
+- `load_library()`: Dynamic loader for `libpramana` (`.so` / `.dylib` / `.dll`)
+- `version()`: Engine version string
+
+---
+
+#### 1. Building and Solving a Model via Optimization IR
 ```python
 import saoe
 
-# Build via Optimization IR
-model = saoe.Model("refinery_demo", maximize=True)
+# Instantiate optimization model
+model = saoe.Model("refinery_production", maximize=True)
+
+# Add decision variables (continuous & integer)
 x = model.add_variable("x", lb=0, ub=4, cost=3)
 y = model.add_variable("y", lb=0, cost=5, integer=True)
+
+# Add constraints (sum(coeff * var) <= ub)
 model.add_constraint({x: 1, y: 2}, ub=8, name="capacity")
 
 # Solve with closed-loop Optimization Autopilot
 result = saoe.solve(model)
 print(result.summary())
+print(f"Status: {result.status}, Objective: {result.objective:.4f}, Certified: {result.certified}")
 ```
 
-### CLI Execution
+#### 2. Mathematical Structural Autopsy & Problem Intelligence
+```python
+import saoe
+
+# Inspect any in-memory model or file path (.mps, .mps.gz, .qps)
+autopsy = saoe.autopsy("data/netlib/afiro.mps.gz")
+
+print(f"Problem: {autopsy.name}")
+print(f"Variables: {autopsy.num_vars}, Constraints: {autopsy.num_constraints}, Nonzeros: {autopsy.nnz}")
+print(f"Sparsity: {autopsy.sparsity_ratio * 100:.2f}%")
+print(f"Dynamic Range: 10^{autopsy.dynamic_range_decades:.1f} decades")
+print(f"Conditioning: {'Ill-Conditioned' if autopsy.ill_conditioned else 'Well-Conditioned'}")
+print(f"Recommended Precision: {autopsy.recommended_precision}")
+print(f"Decomposition Candidate: {autopsy.recommended_decomposition}")
+```
+
+#### 3. Quantum-Inspired Combinatorial Optimization (QUBO)
+```python
+import saoe
+
+# Formulate binary quadratic assignment / unconstrained binary optimization
+qubo_matrix = {
+    (0, 0): -2.0,
+    (1, 1): -3.0,
+    (0, 1): 4.0,  # Coupling penalty
+}
+
+optimizer = saoe.QuantumInspiredSubproblemOptimizer()
+best_spins, energy = optimizer.solve_qubo(qubo_matrix, num_sweeps=1000)
+print(f"Optimal binary configuration: {best_spins}, Energy: {energy}")
+```
+
+#### 4. Automatic Structural Decomposition (Benders / Dantzig-Wolfe)
+```python
+import saoe
+
+engine = saoe.DecompositionEngine()
+# Automatically analyzes constraint graph for block-angular or linking structures
+partition = engine.detect_structure(model)
+print(f"Detected Structure: {partition.structure_type}, Blocks: {len(partition.subproblems)}")
+```
+
+---
+
+### Direct Native C++ Engine
 ```bash
 ./build/pramana solve data/netlib/afiro.mps.gz
 ```
 
-### Interactive TUI Console
-```bash
-PYTHONPATH="./python" python3 -m pramana.tui
-```
+

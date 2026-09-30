@@ -632,7 +632,7 @@ class App:
                 rows.append(pad(a, lw) + c(" │ ", ORANGE) + pad(b, rw))
         else:
             rows = left + ["---"] + right
-        box(rows, w, title=f"PRAMANA 2.0 · SAOE Sovereign Optimizer", title_style=BOLD + ORANGE)
+        box(rows, w, title=f"PRAMANA v{VERSION} (2.0 · SAOE Sovereign Optimizer)", title_style=BOLD + ORANGE)
         out()
 
     # ----- input area

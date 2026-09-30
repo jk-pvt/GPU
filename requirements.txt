@@ -1,0 +1,7 @@
+# PRAMANA 2.0 / SAOE Requirements
+# Note: PRAMANA and SAOE core solvers run with 0 third-party dependencies (C++20 + Python standard library).
+# The packages below provide optional capabilities: reference benchmarking against HiGHS, plotting, and test runners.
+
+pytest>=7.0.0
+scipy>=1.9.0
+numpy>=1.20.0
